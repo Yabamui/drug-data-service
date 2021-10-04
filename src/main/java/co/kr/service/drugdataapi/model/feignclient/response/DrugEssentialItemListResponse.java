@@ -7,10 +7,10 @@ import lombok.*;
 @Builder
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@JsonDeserialize(builder = DrugPatentInfoListResponse.DrugPatentInfoListResponseBuilder.class)
-public class DrugPatentInfoListResponse {
+@JsonDeserialize(builder = DrugEssentialItemListResponse.DrugEssentialItemListResponseBuilder.class)
+public class DrugEssentialItemListResponse {
     @JsonProperty("header")
     private final GetDrbEasyDrugListHeader header;
     @JsonProperty("body")
-    private final DrugPatentInfoListBody body;
+    private final DrugEssentialItemListBody body;
 }

@@ -1,46 +1,48 @@
 package co.kr.service.drugdataapi.model.feignclient.response;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 
 @Builder
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@JsonDeserialize(builder = DrugPatentInfoListItem.DrugPatentInfoListItemBuilder.class)
 public class DrugPatentInfoListItem {
-    @SerializedName("INGR_ENG_NAME")
+    @JsonProperty("INGR_ENG_NAME")
     private final String ingredientNameEng;
-    @SerializedName("INGR_KOR_NAME")
+    @JsonProperty("INGR_KOR_NAME")
     private final String ingredientName;
-    @SerializedName("ITEM_NAME_ENG")
+    @JsonProperty("ITEM_NAME_ENG")
     private final String goodsNameEng;
-    @SerializedName("ITEM_NAME_KOR")
+    @JsonProperty("ITEM_NAME_KOR")
     private final String goodsName;
-    @SerializedName("SELLING_CORP")
+    @JsonProperty("SELLING_CORP")
     private final String sellingCorp;
-    @SerializedName("DOSAGE_FORM")
+    @JsonProperty("DOSAGE_FORM")
     private final String dosageForm;
-    @SerializedName("STRENGTH")
+    @JsonProperty("STRENGTH")
     private final String strength;
-    @SerializedName("GROUPING_NO")
+    @JsonProperty("GROUPING_NO")
     private final String groupingNo;
-    @SerializedName("PMS_EXP_DATE")
+    @JsonProperty("PMS_EXP_DATE")
     private final String pmsExpiredDate;
-    @SerializedName("KOR_SUIT_YN")
+    @JsonProperty("KOR_SUIT_YN")
     private final String korSuitYn;
-    @SerializedName("ITEM_SEQ")
+    @JsonProperty("ITEM_SEQ")
     private final String itemSeq;
-    @SerializedName("PAGE_GB_NM")
+    @JsonProperty("PAGE_GB_NM")
     private final String pageCategory;
-    @SerializedName("PATENT_GB_CODE")
+    @JsonProperty("PATENT_GB_CODE")
     private final String patentCategory;
-    @SerializedName("DOMESTIC_INVN_NM")
+    @JsonProperty("DOMESTIC_INVN_NM")
     private final String domesticInventionName;
-    @SerializedName("PATENTEE")
+    @JsonProperty("PATENTEE")
     private final String patentee;
-    @SerializedName("DOMESTIC_PATENT_NO")
+    @JsonProperty("DOMESTIC_PATENT_NO")
     private final String domesticPatentNo;
-    @SerializedName("DOMESTIC_PATENT_STATUS")
+    @JsonProperty("DOMESTIC_PATENT_STATUS")
     private final String domesticPatentStatus;
-    @SerializedName("DOMESTIC_END_DATE")
+    @JsonProperty("DOMESTIC_END_DATE")
     private final String domesticEndDate;
 }

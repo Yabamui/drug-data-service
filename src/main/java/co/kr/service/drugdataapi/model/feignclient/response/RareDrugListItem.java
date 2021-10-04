@@ -1,40 +1,42 @@
 package co.kr.service.drugdataapi.model.feignclient.response;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 
 @Builder
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@JsonDeserialize(builder = RareDrugListItem.RareDrugListItemBuilder.class)
 public class RareDrugListItem {
-    @SerializedName("RARITY_DRUG_APPOINT_NO")
+    @JsonProperty("RARITY_DRUG_APPOINT_NO")
     private final String rareDrugAppointNo;
-    @SerializedName("MANUFPLACE_NAME")
+    @JsonProperty("MANUFPLACE_NAME")
     private final String manufacturePlaceName;
-    @SerializedName("APPLY_NAME")
+    @JsonProperty("APPLY_NAME")
     private final String applyName;
-    @SerializedName("APPLY_TEL_NO")
+    @JsonProperty("APPLY_TEL_NO")
     private final String applyTelNo;
-    @SerializedName("MANUFPLACE_ZIP_NO")
+    @JsonProperty("MANUFPLACE_ZIP_NO")
     private final String manufacturePlaceZipNo;
-    @SerializedName("MANUFPLACE_ADDR1")
+    @JsonProperty("MANUFPLACE_ADDR1")
     private final String manufacturePlaceAdd1;
-    @SerializedName("MANUFPLACE_ADDR2")
+    @JsonProperty("MANUFPLACE_ADDR2")
     private final String manufacturePlaceAdd2;
-    @SerializedName("MANUFPLACE_TEL_NO")
+    @JsonProperty("MANUFPLACE_TEL_NO")
     private final String manufacturePlaceTelNo;
-    @SerializedName("PRODT_NAME")
+    @JsonProperty("PRODT_NAME")
     private final String productName;
-    @SerializedName("TARGET_DISEASE")
+    @JsonProperty("TARGET_DISEASE")
     private final String targetDisease;
-    @SerializedName("GOODS_NAME")
+    @JsonProperty("GOODS_NAME")
     private final String goodsName;
-    @SerializedName("MANUF_NAME")
+    @JsonProperty("MANUF_NAME")
     private final String manufactureName;
-    @SerializedName("APPOINT_DATE")
+    @JsonProperty("APPOINT_DATE")
     private final String appointmentDate;
-    @SerializedName("APPOINT_CANCEL_DATE")
+    @JsonProperty("APPOINT_CANCEL_DATE")
     private final String appointmentCancelDate;
-    @SerializedName("RECEIPT_NO")
+    @JsonProperty("RECEIPT_NO")
     private final String receiptNo;
 }

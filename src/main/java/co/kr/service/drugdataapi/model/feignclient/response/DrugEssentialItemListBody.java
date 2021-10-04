@@ -4,13 +4,14 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.google.gson.annotations.SerializedName;
 import lombok.*;
 
 @Builder
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@JsonDeserialize(builder = RareDrugListBody.RareDrugListBodyBuilder.class)
-public class RareDrugListBody {
+@JsonDeserialize(builder = DrugEssentialItemListBody.DrugEssentialItemListBodyBuilder.class)
+public class DrugEssentialItemListBody {
     @JsonProperty("pageNo")
     private final Integer pageNo;
     @JsonProperty("totalCount")
@@ -18,5 +19,5 @@ public class RareDrugListBody {
     @JsonProperty("numOfRows")
     private final Integer numOfRows;
     @JsonProperty("items")
-    private final List<RareDrugListItem> items;
+    private final List<DrugEssentialItemListItem> items;
 }

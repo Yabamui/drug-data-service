@@ -1,32 +1,34 @@
 package co.kr.service.drugdataapi.model.feignclient.response;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 
 @Builder
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@JsonDeserialize(builder = RareDrugIngredientItem.RareDrugIngredientItemBuilder.class)
 public class RareDrugIngredientItem {
-    @SerializedName("RARE_DRUG_NO")
+    @JsonProperty("RARE_DRUG_NO")
     private final String rareDrugAppointmentNo;
-    @SerializedName("MFTR_NM")
+    @JsonProperty("MFTR_NM")
     private final String manufactureName;
-    @SerializedName("TRGT_DISS_NM")
+    @JsonProperty("TRGT_DISS_NM")
     private final String targetDisease;
-    @SerializedName("PRDT_NM")
+    @JsonProperty("PRDT_NM")
     private final String goodsName;
-    @SerializedName("MDCT_NM")
+    @JsonProperty("MDCT_NM")
     private final String productName;
-    @SerializedName("DSGN_YMD")
+    @JsonProperty("DSGN_YMD")
     private final String appointmentDate;
-    @SerializedName("DSGN_RTRCN_YMD")
+    @JsonProperty("DSGN_RTRCN_YMD")
     private final String appointmentCancelDate;
-    @SerializedName("RCPT_PRCS_NO")
+    @JsonProperty("RCPT_PRCS_NO")
     private final String receiptNo;
-    @SerializedName("CPNT_SEQ")
+    @JsonProperty("CPNT_SEQ")
     private final String ingredientSeq;
-    @SerializedName("CPNT_CD")
+    @JsonProperty("CPNT_CD")
     private final String ingredientCode;
-    @SerializedName("CPNT_KOR_NM")
+    @JsonProperty("CPNT_KOR_NM")
     private final String ingredientName;
 }

@@ -9,8 +9,8 @@ import lombok.*;
 @Builder
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@JsonDeserialize(builder = RareDrugListBody.RareDrugListBodyBuilder.class)
-public class RareDrugListBody {
+@JsonDeserialize(builder = DrugEffectUsageQuantityAreaBody.DrugEffectUsageQuantityAreaBodyBuilder.class)
+public class DrugEffectUsageQuantityAreaBody {
     @JsonProperty("pageNo")
     private final Integer pageNo;
     @JsonProperty("totalCount")
@@ -18,5 +18,5 @@ public class RareDrugListBody {
     @JsonProperty("numOfRows")
     private final Integer numOfRows;
     @JsonProperty("items")
-    private final List<RareDrugListItem> items;
+    private final List<DrugEffectUsageQuantityAreaItem> items;
 }

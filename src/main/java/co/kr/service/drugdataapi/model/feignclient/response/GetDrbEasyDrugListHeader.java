@@ -1,14 +1,16 @@
 package co.kr.service.drugdataapi.model.feignclient.response;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 
 @Builder
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@JsonDeserialize(builder = GetDrbEasyDrugListHeader.GetDrbEasyDrugListHeaderBuilder.class)
 public class GetDrbEasyDrugListHeader {
-    @SerializedName("resultCode")
+    @JsonProperty("resultCode")
     private final String resultCode;
-    @SerializedName("resultMsg")
+    @JsonProperty("resultMsg")
     private final String resultMsg;
 }

@@ -1,11 +1,10 @@
 package co.kr.service.drugdataapi.util;
 
-import java.util.Map;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,9 +14,9 @@ import org.springframework.stereotype.Component;
 @Component
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Slf4j
-public class JsonConvert {
-    private static final ObjectMapper mapper = new ObjectMapper()
-            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+public class XmlConvert {
+    private static final ObjectMapper mapper = new XmlMapper().configure(
+            DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     public static <T> String toString(final T object) {
         try {
@@ -35,9 +34,5 @@ public class JsonConvert {
             log.error(ExceptionUtils.getStackTrace(e));
             return null;
         }
-    }
-
-    public static <T> Map<String, String> toMap(final T object) {
-        return toObject(toString(object), new TypeReference<>() {});
     }
 }
