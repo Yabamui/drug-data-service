@@ -7,10 +7,10 @@ import lombok.*;
 @Builder
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@JsonDeserialize(builder = DrugEffectUsageQuantityAreaListResponse.DrugEffectUsageQuantityAreaListResponseBuilder.class)
-public class DrugEffectUsageQuantityAreaListResponse {
+@JsonDeserialize(builder = UsageQuantityDrugEffectInstitutionListResponse.UsageQuantityDrugEffectInstitutionListResponseBuilder.class)
+public class UsageQuantityDrugEffectInstitutionListResponse {
     @JsonProperty("header")
     private final DrugResponseHeader header;
     @JsonProperty("body")
-    private final DrugEffectUsageQuantityBody<DrugEffectUsageQuantityAreaListItem> body;
+    private final UsageQuantityBody<UsageQuantityDrugEffectInstitutionListItem> body;
 }

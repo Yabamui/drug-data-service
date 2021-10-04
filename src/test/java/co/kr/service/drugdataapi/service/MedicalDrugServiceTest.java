@@ -385,10 +385,10 @@ class MedicalDrugServiceTest {
     }
 
     @Test
-    void getDrugEffectUsageQuantityAreaListTest() {
+    void getUsageQuantityDrugEffectAreaListTest() {
         final String drugEffectNo = "111";
 
-        final Map<String, String> request = JsonConvert.toMap(DrugEffectUsageQuantityAreaListRequest.builder()
+        final Map<String, String> request = JsonConvert.toMap(UsageQuantityDrugEffectAreaListRequest.builder()
                 .serviceKey(publicDataApiProperties.getEncodeKey())
                 .pageNo(1)
                 .numOfRows(100)
@@ -402,7 +402,7 @@ class MedicalDrugServiceTest {
 
         assertThat(request).isNotEmpty();
 
-        final Response response = this.medicalDrugClient.getDrugEffectUsageQuantityAreaList(request);
+        final Response response = this.medicalDrugClient.getUsageQuantityDrugEffectAreaList(request);
 
         assertThat(response).isNotNull();
         assertThat(response.status()).isEqualTo(HttpStatus.OK.value());
@@ -411,7 +411,7 @@ class MedicalDrugServiceTest {
 
         assertThat(responseBody).isNotBlank();
 
-        final DrugEffectUsageQuantityAreaListResponse responseData = XmlConvert.toObject(responseBody, new TypeReference<>() {
+        final UsageQuantityDrugEffectAreaListResponse responseData = XmlConvert.toObject(responseBody, new TypeReference<>() {
         });
 
         assertThat(responseData).isNotNull();
@@ -420,11 +420,11 @@ class MedicalDrugServiceTest {
     }
 
     @Test
-    void getDrugEffectUsageQuantityInstitutionListTest() {
+    void getUsageQuantityDrugEffectInstitutionListTest() {
         final String drugEffectNo = "111";
         final String institutionCode = "1";
 
-        final Map<String, String> request = JsonConvert.toMap(DrugEffectUsageQuantityInstitutionListRequest.builder()
+        final Map<String, String> request = JsonConvert.toMap(UsageQuantityDrugEffectInstitutionListRequest.builder()
                 .serviceKey(publicDataApiProperties.getEncodeKey())
                 .pageNo(1)
                 .numOfRows(100)
@@ -439,7 +439,7 @@ class MedicalDrugServiceTest {
 
         assertThat(request).isNotEmpty();
 
-        final Response response = this.medicalDrugClient.getDrugEffectUsageQuantityInstitutionList(request);
+        final Response response = this.medicalDrugClient.getUsageQuantityDrugEffectInstitutionList(request);
 
         assertThat(response).isNotNull();
         assertThat(response.status()).isEqualTo(HttpStatus.OK.value());
@@ -448,7 +448,7 @@ class MedicalDrugServiceTest {
 
         assertThat(responseBody).isNotBlank();
 
-        final DrugEffectUsageQuantityInstitutionListResponse responseData = XmlConvert.toObject(responseBody, new TypeReference<>() {
+        final UsageQuantityDrugEffectInstitutionListResponse responseData = XmlConvert.toObject(responseBody, new TypeReference<>() {
         });
 
         assertThat(responseData).isNotNull();
@@ -457,10 +457,10 @@ class MedicalDrugServiceTest {
     }
 
     @Test
-    void getDrugEffectUsageQuantityDiseaseListTest() {
+    void getUsageQuantityDrugEffectDiseaseListTest() {
         final String drugEffectNo = "111";
 
-        final Map<String, String> request = JsonConvert.toMap(DrugEffectUsageQuantityDiseaseListRequest.builder()
+        final Map<String, String> request = JsonConvert.toMap(UsageQuantityDrugEffectDiseaseListRequest.builder()
                 .serviceKey(publicDataApiProperties.getEncodeKey())
                 .pageNo(1)
                 .numOfRows(100)
@@ -472,7 +472,7 @@ class MedicalDrugServiceTest {
 
         assertThat(request).isNotEmpty();
 
-        final Response response = this.medicalDrugClient.getDrugEffectUsageQuantityDiseaseList(request);
+        final Response response = this.medicalDrugClient.getUsageQuantityDrugEffectDiseaseList(request);
 
         assertThat(response).isNotNull();
         assertThat(response.status()).isEqualTo(HttpStatus.OK.value());
@@ -481,7 +481,42 @@ class MedicalDrugServiceTest {
 
         assertThat(responseBody).isNotBlank();
 
-        final DrugEffectUsageQuantityDiseaseListResponse responseData = XmlConvert.toObject(responseBody, new TypeReference<>() {
+        final UsageQuantityDrugEffectDiseaseListResponse responseData = XmlConvert.toObject(responseBody, new TypeReference<>() {
+        });
+
+        assertThat(responseData).isNotNull();
+        assertThat(responseData.getHeader().getResultCode()).isEqualTo("00");
+        assertThat(responseData.getBody().getItems()).isNotEmpty();
+    }
+
+    @Test
+    void getUsageQuantityATC3StepAreaListTest() {
+        final String atcStep3Code = "A01A";
+
+        final Map<String, String> request = JsonConvert.toMap(UsageQuantityATCStep3AreaListRequest.builder()
+                .serviceKey(publicDataApiProperties.getEncodeKey())
+                .pageNo(1)
+                .numOfRows(100)
+                .diagnosisYm("202001")
+                .insurerCode(InsurerTypeCode.CODE_ALL.getCode())
+                .providerTypeCode(ProviderTypeCode.CODE_PHARMACY.getCode())
+                .sidoCode("110000")
+                .sigunguCode("110001")
+                .atcStep3Code(atcStep3Code)
+                .build());
+
+        assertThat(request).isNotEmpty();
+
+        final Response response = this.medicalDrugClient.getUsageQuantityATCStep3AreaList(request);
+
+        assertThat(response).isNotNull();
+        assertThat(response.status()).isEqualTo(HttpStatus.OK.value());
+
+        final String responseBody = this.getBodyString(response);
+
+        assertThat(responseBody).isNotBlank();
+
+        final UsageQuantityATCStep3AreaListResponse responseData = XmlConvert.toObject(responseBody, new TypeReference<>() {
         });
 
         assertThat(responseData).isNotNull();
@@ -556,7 +591,7 @@ class MedicalDrugServiceTest {
                 "    </body>\n" +
                 "</response>";
 
-        final DrugEffectUsageQuantityAreaListResponse response = XmlConvert.toObject(xml, new TypeReference<>() {
+        final UsageQuantityDrugEffectAreaListResponse response = XmlConvert.toObject(xml, new TypeReference<>() {
         });
 
         assertThat(response).isNotNull();

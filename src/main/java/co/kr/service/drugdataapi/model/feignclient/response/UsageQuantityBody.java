@@ -9,8 +9,8 @@ import lombok.*;
 @Builder
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@JsonDeserialize(builder = DrugEffectUsageQuantityBody.DrugEffectUsageQuantityBodyBuilder.class)
-public class DrugEffectUsageQuantityBody <T> {
+@JsonDeserialize(builder = UsageQuantityBody.UsageQuantityBodyBuilder.class)
+public class UsageQuantityBody<T> {
     @JsonProperty("pageNo")
     private final Integer pageNo;
     @JsonProperty("totalCount")

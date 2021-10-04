@@ -7,8 +7,8 @@ import lombok.*;
 @Builder
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@JsonDeserialize(builder = DrugEffectUsageQuantityAreaListRequest.DrugEffectUsageQuantityAreaListRequestBuilder.class)
-public class DrugEffectUsageQuantityAreaListRequest {
+@JsonDeserialize(builder = UsageQuantityDrugEffectAreaListRequest.UsageQuantityDrugEffectAreaListRequestBuilder.class)
+public class UsageQuantityDrugEffectAreaListRequest {
     private final String serviceKey;
     private final int pageNo;
     private final int numOfRows;
