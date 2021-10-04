@@ -524,6 +524,43 @@ class MedicalDrugServiceTest {
         assertThat(responseData.getBody().getItems()).isNotEmpty();
     }
 
+    @Test
+    void getUsageQuantityATC4StepAreaListTest() {
+        final String atcStep4Code = "A01AC";
+
+        final Map<String, String> request = JsonConvert.toMap(UsageQuantityATCStep4AreaListRequest.builder()
+                .serviceKey(publicDataApiProperties.getEncodeKey())
+                .pageNo(1)
+                .numOfRows(100)
+                .diagnosisYm("202001")
+                .insurerCode(InsurerTypeCode.CODE_ALL.getCode())
+                .providerTypeCode(ProviderTypeCode.CODE_PHARMACY.getCode())
+                .sidoCode("110000")
+                .sigunguCode("110001")
+                .atcStep4Code(atcStep4Code)
+                .build());
+
+        assertThat(request).isNotEmpty();
+
+        final Response response = this.medicalDrugClient.getUsageQuantityATCStep4AreaList(request);
+
+        assertThat(response).isNotNull();
+        assertThat(response.status()).isEqualTo(HttpStatus.OK.value());
+
+        final String responseBody = this.getBodyString(response);
+
+        assertThat(responseBody).isNotBlank();
+
+        final UsageQuantityATCStep4AreaListResponse responseData = XmlConvert.toObject(responseBody, new TypeReference<>() {
+        });
+
+        assertThat(responseData).isNotNull();
+        assertThat(responseData.getHeader().getResultCode()).isEqualTo("00");
+
+        if (CollectionUtils.isEmpty(responseData.getBody().getItems())) {
+            log.info("response item is empty");
+        }
+    }
 
     private String getBodyString(final Response response) {
         try {
