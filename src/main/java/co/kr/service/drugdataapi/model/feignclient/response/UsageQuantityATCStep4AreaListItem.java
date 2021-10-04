@@ -24,7 +24,7 @@ public class UsageQuantityATCStep4AreaListItem {
     @JsonProperty("totUseQty")
     private final String totalUseQuantity;
     @JsonProperty("recuClCd")
-    private final String recuperativeInstitutionCode;
+    private final String institutionCode;
     @JsonProperty("atcStep4Cd")
     private final String atcStep4Code;
     @JsonProperty("atcStep4CdNm")

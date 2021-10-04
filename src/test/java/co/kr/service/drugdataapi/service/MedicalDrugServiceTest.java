@@ -490,7 +490,7 @@ class MedicalDrugServiceTest {
     }
 
     @Test
-    void getUsageQuantityATC3StepAreaListTest() {
+    void getUsageQuantityATCStep3AreaListTest() {
         final String atcStep3Code = "A01A";
 
         final Map<String, String> request = JsonConvert.toMap(UsageQuantityATCStep3AreaListRequest.builder()
@@ -525,7 +525,7 @@ class MedicalDrugServiceTest {
     }
 
     @Test
-    void getUsageQuantityATC4StepAreaListTest() {
+    void getUsageQuantityATCStep4AreaListTest() {
         final String atcStep4Code = "A01AC";
 
         final Map<String, String> request = JsonConvert.toMap(UsageQuantityATCStep4AreaListRequest.builder()
@@ -560,6 +560,43 @@ class MedicalDrugServiceTest {
         if (CollectionUtils.isEmpty(responseData.getBody().getItems())) {
             log.info("response item is empty");
         }
+    }
+
+    @Test
+    void getUsageQuantityATCStep3InstitutionListTest() {
+        final String atcStep3Code = "A01A";
+        final String institutionCode = "01";
+
+        final Map<String, String> request = JsonConvert.toMap(UsageQuantityATCStep3InstitutionListRequest.builder()
+                .serviceKey(publicDataApiProperties.getEncodeKey())
+                .pageNo(1)
+                .numOfRows(100)
+                .diagnosisYm("202001")
+                .insurerCode(InsurerTypeCode.CODE_ALL.getCode())
+                .providerTypeCode(ProviderTypeCode.CODE_PHARMACY.getCode())
+                .sidoCode("110000")
+                .sigunguCode("110001")
+                .atcStep3Code(atcStep3Code)
+                .institutionCode(institutionCode)
+                .build());
+
+        assertThat(request).isNotEmpty();
+
+        final Response response = this.medicalDrugClient.getUsageQuantityATCStep3InstitutionList(request);
+
+        assertThat(response).isNotNull();
+        assertThat(response.status()).isEqualTo(HttpStatus.OK.value());
+
+        final String responseBody = this.getBodyString(response);
+
+        assertThat(responseBody).isNotBlank();
+
+        final UsageQuantityATCStep3InstitutionListResponse responseData = XmlConvert.toObject(responseBody, new TypeReference<>() {
+        });
+
+        assertThat(responseData).isNotNull();
+        assertThat(responseData.getHeader().getResultCode()).isEqualTo("00");
+        assertThat(responseData.getBody().getItems()).isNotEmpty();
     }
 
     private String getBodyString(final Response response) {

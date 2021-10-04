@@ -7,8 +7,8 @@ import lombok.*;
 @Builder
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@JsonDeserialize(builder = UsageQuantityATCStep3AreaListItem.UsageQuantityATCStep3AreaListItemBuilder.class)
-public class UsageQuantityATCStep3AreaListItem {
+@JsonDeserialize(builder = UsageQuantityATCStep3InstitutionListItem.UsageQuantityATCStep3InstitutionListItemBuilder.class)
+public class UsageQuantityATCStep3InstitutionListItem {
     @JsonProperty("diagYm")
     private final String diagnosisDate;
     @JsonProperty("insupTpCd")

@@ -7,8 +7,8 @@ import lombok.*;
 @Builder
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@JsonDeserialize(builder = UsageQuantityATCStep3AreaListRequest.UsageQuantityATCStep3AreaListRequestBuilder.class)
-public class UsageQuantityATCStep3AreaListRequest {
+@JsonDeserialize(builder = UsageQuantityATCStep3InstitutionListRequest.UsageQuantityATCStep3InstitutionListRequestBuilder.class)
+public class UsageQuantityATCStep3InstitutionListRequest {
     private final String serviceKey;
     private final int pageNo;
     private final int numOfRows;
@@ -24,4 +24,6 @@ public class UsageQuantityATCStep3AreaListRequest {
     private final String sigunguCode;
     @JsonProperty("atcStep3Cd")
     private final String atcStep3Code;
+    @JsonProperty("clCd")
+    private final String institutionCode;
 }

@@ -12,8 +12,6 @@ public class UsageQuantityATCStep4AreaListRequest {
     private final String serviceKey;
     private final int pageNo;
     private final int numOfRows;
-    @JsonProperty("atcStep4Cd")
-    private final String atcStep4Code;
     @JsonProperty("diagYm")
     private final String diagnosisYm;
     @JsonProperty("insupTp")
@@ -24,4 +22,6 @@ public class UsageQuantityATCStep4AreaListRequest {
     private final String sidoCode;
     @JsonProperty("sgguCd")
     private final String sigunguCode;
+    @JsonProperty("atcStep4Cd")
+    private final String atcStep4Code;
 }
