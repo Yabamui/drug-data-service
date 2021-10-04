@@ -9,8 +9,8 @@ import lombok.*;
 @Builder
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@JsonDeserialize(builder = DrugEffectUsageQuantityAreaBody.DrugEffectUsageQuantityAreaBodyBuilder.class)
-public class DrugEffectUsageQuantityAreaBody {
+@JsonDeserialize(builder = DrugEffectUsageQuantityBody.DrugEffectUsageQuantityBodyBuilder.class)
+public class DrugEffectUsageQuantityBody <T> {
     @JsonProperty("pageNo")
     private final Integer pageNo;
     @JsonProperty("totalCount")
@@ -18,5 +18,5 @@ public class DrugEffectUsageQuantityAreaBody {
     @JsonProperty("numOfRows")
     private final Integer numOfRows;
     @JsonProperty("items")
-    private final List<DrugEffectUsageQuantityAreaItem> items;
+    private final List<T> items;
 }

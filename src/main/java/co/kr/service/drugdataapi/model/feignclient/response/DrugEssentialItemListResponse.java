@@ -10,7 +10,7 @@ import lombok.*;
 @JsonDeserialize(builder = DrugEssentialItemListResponse.DrugEssentialItemListResponseBuilder.class)
 public class DrugEssentialItemListResponse {
     @JsonProperty("header")
-    private final GetDrbEasyDrugListHeader header;
+    private final DrugResponseHeader header;
     @JsonProperty("body")
     private final DrugEssentialItemListBody body;
 }

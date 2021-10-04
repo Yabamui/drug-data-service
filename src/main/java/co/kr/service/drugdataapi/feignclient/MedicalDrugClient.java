@@ -63,4 +63,23 @@ public interface MedicalDrugClient {
      */
     @GetMapping("/B551182/msupUserInfoService/getMeftDivAreaList")
     Response getDrugEffectUsageQuantityAreaList(@RequestParam Map<String, String> request);
+
+    /**
+     * default format
+     *
+     * @param request 요청 정보
+     * @return 응답 정보
+     */
+    @GetMapping("/B551182/msupUserInfoService/getMeftDivClList")
+    Response getDrugEffectUsageQuantityInstitutionList(@RequestParam Map<String, String> request);
+
+
+    /**
+     * default format
+     *
+     * @param request
+     * @return
+     */
+    @GetMapping("")
+    Response get(@RequestParam Map<String, String> request);
 }

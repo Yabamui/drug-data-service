@@ -10,7 +10,7 @@ import lombok.*;
 @JsonDeserialize(builder = GetDrbEasyDrugListResponse.GetDrbEasyDrugListResponseBuilder.class)
 public class GetDrbEasyDrugListResponse {
     @JsonProperty("header")
-    private final GetDrbEasyDrugListHeader header;
+    private final DrugResponseHeader header;
     @JsonProperty("body")
     private final GetDrbEasyDrugListBody body;
 }

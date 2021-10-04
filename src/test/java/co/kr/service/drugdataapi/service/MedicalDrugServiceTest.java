@@ -384,7 +384,6 @@ class MedicalDrugServiceTest {
         this.drugEssentialItemRepository.saveAll(drugEssentialItems);
     }
 
-
     @Test
     void getDrugEffectUsageQuantityAreaListTest() {
         final String drugEffectNo = "111";
@@ -412,7 +411,45 @@ class MedicalDrugServiceTest {
 
         assertThat(responseBody).isNotBlank();
 
-        final DrugEffectUsageQuantityAreaResponse responseData = XmlConvert.toObject(responseBody, new TypeReference<>() {});
+        final DrugEffectUsageQuantityAreaListResponse responseData = XmlConvert.toObject(responseBody, new TypeReference<>() {
+        });
+
+        assertThat(responseData).isNotNull();
+        assertThat(responseData.getHeader().getResultCode()).isEqualTo("00");
+        assertThat(responseData.getBody().getItems()).isNotEmpty();
+    }
+
+    @Test
+    void get() {
+        final String drugEffectNo = "111";
+        final String institutionCode = "1";
+
+        final Map<String, String> request = JsonConvert.toMap(DrugEffectUsageQuantityInstitutionListRequest.builder()
+                .serviceKey(publicDataApiProperties.getEncodeKey())
+                .pageNo(1)
+                .numOfRows(100)
+                .institutionCode(institutionCode)
+                .diagnosisYm("201608")
+                .drugEffectNo(drugEffectNo)
+                .insurerCode(InsurerTypeCode.CODE_ALL.getCode())
+                .providerTypeCode(ProviderTypeCode.CODE_PHARMACY.getCode())
+                .sidoCode("110000")
+                .sigunguCode("110023")
+                .build());
+
+        assertThat(request).isNotEmpty();
+
+        final Response response = this.medicalDrugClient.getDrugEffectUsageQuantityInstitutionList(request);
+
+        assertThat(response).isNotNull();
+        assertThat(response.status()).isEqualTo(HttpStatus.OK.value());
+
+        final String responseBody = this.getBodyString(response);
+
+        assertThat(responseBody).isNotBlank();
+
+        final DrugEffectUsageQuantityInstitutionListResponse responseData = XmlConvert.toObject(responseBody, new TypeReference<>() {
+        });
 
         assertThat(responseData).isNotNull();
         assertThat(responseData.getHeader().getResultCode()).isEqualTo("00");
@@ -486,7 +523,8 @@ class MedicalDrugServiceTest {
                 "    </body>\n" +
                 "</response>";
 
-        final DrugEffectUsageQuantityAreaResponse response = XmlConvert.toObject(xml, new TypeReference<>() {});
+        final DrugEffectUsageQuantityAreaListResponse response = XmlConvert.toObject(xml, new TypeReference<>() {
+        });
 
         assertThat(response).isNotNull();
 
