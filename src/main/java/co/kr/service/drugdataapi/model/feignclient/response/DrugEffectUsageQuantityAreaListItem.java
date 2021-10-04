@@ -12,21 +12,21 @@ public class DrugEffectUsageQuantityAreaListItem {
     @JsonProperty("diagYm")
     private final String diagnosisDate;
     @JsonProperty("insupTpCd")
-    private final String insupTpCd;
+    private final String insurerCode;
     @JsonProperty("meftDivNo")
-    private final String meftDivNo;
+    private final String drugEffectNo;
     @JsonProperty("meftDivNoNm")
-    private final String meftDivNoNm;
+    private final String drugEffectName;
     @JsonProperty("msupUseAmt")
-    private final String msupUseAmt;
+    private final String useAmount;
     @JsonProperty("sgguCd")
-    private final String sgguCd;
+    private final String sigunguCode;
     @JsonProperty("sgguCdNm")
-    private final String sgguCdNm;
+    private final String sigunguName;
     @JsonProperty("sidoCd")
-    private final String sidoCd;
+    private final String sidoCode;
     @JsonProperty("sidoCdNm")
-    private final String sidoCdNm;
+    private final String sidoName;
     @JsonProperty("totUseQty")
-    private final String totUseQty;
+    private final String totalUseQuantity;
 }

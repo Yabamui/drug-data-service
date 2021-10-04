@@ -7,10 +7,8 @@ import lombok.*;
 @Builder
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@JsonDeserialize(builder = DrugEffectUsageQuantityInstitutionListItem.DrugEffectUsageQuantityInstitutionListItemBuilder.class)
-public class DrugEffectUsageQuantityInstitutionListItem {
-    @JsonProperty("clCdNm")
-    private final String institutionCodeName;
+@JsonDeserialize(builder = DrugEffectUsageQuantityDiseaseListItem.DrugEffectUsageQuantityDiseaseListItemBuilder.class)
+public class DrugEffectUsageQuantityDiseaseListItem {
     @JsonProperty("diagYm")
     private final String diagnosisDate;
     @JsonProperty("insupTpCd")
@@ -21,14 +19,10 @@ public class DrugEffectUsageQuantityInstitutionListItem {
     private final String drugEffectName;
     @JsonProperty("msupUseAmt")
     private final String useAmount;
-    @JsonProperty("sgguCd")
-    private final String sigunguCode;
-    @JsonProperty("sgguCdNm")
-    private final String sigunguName;
-    @JsonProperty("sidoCd")
-    private final String sidoCode;
-    @JsonProperty("sidoCdNm")
-    private final String sidoName;
+    @JsonProperty("st3SickSym")
+    private final String diseaseCode;
+    @JsonProperty("st3SickSymNm")
+    private final String diseaseName;
     @JsonProperty("totUseQty")
     private final String totalUseQuantity;
 }

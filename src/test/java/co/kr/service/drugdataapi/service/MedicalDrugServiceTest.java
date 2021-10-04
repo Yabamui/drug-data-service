@@ -420,7 +420,7 @@ class MedicalDrugServiceTest {
     }
 
     @Test
-    void get() {
+    void getDrugEffectUsageQuantityInstitutionListTest() {
         final String drugEffectNo = "111";
         final String institutionCode = "1";
 
@@ -449,6 +449,39 @@ class MedicalDrugServiceTest {
         assertThat(responseBody).isNotBlank();
 
         final DrugEffectUsageQuantityInstitutionListResponse responseData = XmlConvert.toObject(responseBody, new TypeReference<>() {
+        });
+
+        assertThat(responseData).isNotNull();
+        assertThat(responseData.getHeader().getResultCode()).isEqualTo("00");
+        assertThat(responseData.getBody().getItems()).isNotEmpty();
+    }
+
+    @Test
+    void getDrugEffectUsageQuantityDiseaseListTest() {
+        final String drugEffectNo = "111";
+
+        final Map<String, String> request = JsonConvert.toMap(DrugEffectUsageQuantityDiseaseListRequest.builder()
+                .serviceKey(publicDataApiProperties.getEncodeKey())
+                .pageNo(1)
+                .numOfRows(100)
+                .diagnosisYm("201608")
+                .drugEffectNo(drugEffectNo)
+                .insurerCode(InsurerTypeCode.CODE_ALL.getCode())
+                .providerTypeCode(ProviderTypeCode.CODE_PHARMACY.getCode())
+                .build());
+
+        assertThat(request).isNotEmpty();
+
+        final Response response = this.medicalDrugClient.getDrugEffectUsageQuantityDiseaseList(request);
+
+        assertThat(response).isNotNull();
+        assertThat(response.status()).isEqualTo(HttpStatus.OK.value());
+
+        final String responseBody = this.getBodyString(response);
+
+        assertThat(responseBody).isNotBlank();
+
+        final DrugEffectUsageQuantityDiseaseListResponse responseData = XmlConvert.toObject(responseBody, new TypeReference<>() {
         });
 
         assertThat(responseData).isNotNull();
