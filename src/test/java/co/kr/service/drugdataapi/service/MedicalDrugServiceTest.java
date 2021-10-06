@@ -632,7 +632,75 @@ class MedicalDrugServiceTest {
         }
     }
 
+    @Test
+    void getUsageQuantityATCStep4InstitutionListTest() {
+        final String atcStep4Code = "B01AC";
+        final String institutionCode = "01";
 
+        final Map<String, String> request = JsonConvert.toMap(UsageQuantityATCStep4InstitutionListRequest.builder()
+                .serviceKey(publicDataApiProperties.getEncodeKey())
+                .pageNo(1)
+                .numOfRows(100)
+                .diagnosisYm("202001")
+                .insurerCode(InsurerTypeCode.CODE_ALL.getCode())
+                .providerTypeCode(ProviderTypeCode.CODE_PHARMACY.getCode())
+                .sidoCode("110000")
+                .sigunguCode("110001")
+                .atcStep4Code(atcStep4Code)
+                .institutionCode(institutionCode)
+                .build());
+
+        assertThat(request).isNotEmpty();
+
+        final Response response = this.medicalDrugClient.getUsageQuantityATCStep4InstitutionList(request);
+
+        assertThat(response).isNotNull();
+        assertThat(response.status()).isEqualTo(HttpStatus.OK.value());
+
+        final String responseBody = this.getBodyString(response);
+
+        assertThat(responseBody).isNotBlank();
+
+        final UsageQuantityATCStep4InstitutionListResponse responseData = XmlConvert.toObject(responseBody, new TypeReference<>() {
+        });
+
+        assertThat(responseData).isNotNull();
+        assertThat(responseData.getHeader().getResultCode()).isEqualTo("00");
+        assertThat(responseData.getBody().getItems()).isNotEmpty();
+    }
+
+    @Test
+    void getUsageQuantityATCStep4DiseaseListTest() {
+        final String atcStep4Code = "B01AC";
+
+        final Map<String, String> request = JsonConvert.toMap(UsageQuantityATCStep4DiseaseListRequest.builder()
+                .serviceKey(publicDataApiProperties.getEncodeKey())
+                .pageNo(1)
+                .numOfRows(100)
+                .diagnosisYm("202001")
+                .insurerCode(InsurerTypeCode.CODE_ALL.getCode())
+                .providerTypeCode(ProviderTypeCode.CODE_PHARMACY.getCode())
+                .atcStep4Code(atcStep4Code)
+                .build());
+
+        assertThat(request).isNotEmpty();
+
+        final Response response = this.medicalDrugClient.getUsageQuantityATCStep4DiseaseList(request);
+
+        assertThat(response).isNotNull();
+        assertThat(response.status()).isEqualTo(HttpStatus.OK.value());
+
+        final String responseBody = this.getBodyString(response);
+
+        assertThat(responseBody).isNotBlank();
+
+        final UsageQuantityATCStep4DiseaseListResponse responseData = XmlConvert.toObject(responseBody, new TypeReference<>() {
+        });
+
+        assertThat(responseData).isNotNull();
+        assertThat(responseData.getHeader().getResultCode()).isEqualTo("00");
+        assertThat(responseData.getBody().getItems()).isNotEmpty();
+    }
 
 
     private String getBodyString(final Response response) {
