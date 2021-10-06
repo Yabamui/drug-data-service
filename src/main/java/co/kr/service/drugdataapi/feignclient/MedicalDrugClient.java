@@ -91,6 +91,24 @@ public interface MedicalDrugClient {
     Response getUsageQuantityATCStep3AreaList(@RequestParam Map<String, String> request);
 
     /**
+     * 3단계ATC의료기관종별목록조회
+     *
+     * @param request 요청 정보
+     * @return 응답 정보
+     */
+    @GetMapping("/B551182/msupUserInfoService/getAtcStp3AreaList")
+    Response getUsageQuantityATCStep3InstitutionList(@RequestParam Map<String, String> request);
+
+    /**
+     * 3단계ATC상병별사용량목록조회
+     *
+     * @param request 요청 정보
+     * @return 응답 정보
+     */
+    @GetMapping("/B551182/msupUserInfoService/getAtcStp3SickList")
+    Response getUsageQuantityATCStep3DiseaseList(@RequestParam Map<String, String> request);
+
+    /**
      * 4단계ATC별지역별사용량목록조회
      *
      * @param request 요청 정보
@@ -98,13 +116,4 @@ public interface MedicalDrugClient {
      */
     @GetMapping("/B551182/msupUserInfoService/getAtcStp4AreaList")
     Response getUsageQuantityATCStep4AreaList(@RequestParam Map<String, String> request);
-
-    /**
-     * 단계ATC의료기관종별목록조회
-     *
-     * @param request 요청 정보
-     * @return 응답 정보
-     */
-    @GetMapping("/B551182/msupUserInfoService/getAtcStp3AreaList")
-    Response getUsageQuantityATCStep3InstitutionList(@RequestParam Map<String, String> request);
 }
