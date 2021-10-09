@@ -1,20 +1,22 @@
 package co.kr.service.drugdataapi.model.feignclient.request;
 
-import com.google.gson.annotations.SerializedName;
-import lombok.Builder;
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.*;
 
 @Builder
 @Getter
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@JsonDeserialize(builder = RareDrugListRequest.RareDrugListRequestBuilder.class)
 public class RareDrugListRequest {
     private final String serviceKey;
     private final int pageNo;
     private final int numOfRows;
     private final String type;
-    @SerializedName("goods_name")
+    @JsonProperty("goods_name")
     private final String goodsName;
-    @SerializedName("manuf_name")
+    @JsonProperty("manuf_name")
     private final String manufactureName;
-    @SerializedName("appoint_date")
+    @JsonProperty("appoint_date")
     private final String appointmentDate;
 }

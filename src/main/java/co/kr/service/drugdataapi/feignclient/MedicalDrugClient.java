@@ -134,4 +134,13 @@ public interface MedicalDrugClient {
      */
     @GetMapping("/B551182/msupUserInfoService/getAtcStp4SickList")
     Response getUsageQuantityATCStep4DiseaseList(@RequestParam Map<String, String> request);
+
+    /**
+     * 의약품 임상시험 정보
+     *
+     * @param request 요청 정보
+     * @return 응답 정보
+     */
+    @GetMapping("/1470000/MdcinClincTestInfoService/getMdcinClincTestInfoList")
+    Response getDrugClinicalTrialInfoList(@RequestParam Map<String, String> request);
 }

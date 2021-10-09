@@ -30,6 +30,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.DigestUtils;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -51,6 +52,8 @@ class MedicalDrugServiceTest {
     private DrugPatentInfoRepository drugPatentInfoRepository;
     @Autowired
     private DrugEssentialItemRepository drugEssentialItemRepository;
+    @Autowired
+    private DrugClinicalTrialInfoRepository drugClinicalTrialInfoRepository;
 
     @Test
     void getDrbEasyDrugListTest() {
@@ -700,6 +703,51 @@ class MedicalDrugServiceTest {
         assertThat(responseData).isNotNull();
         assertThat(responseData.getHeader().getResultCode()).isEqualTo("00");
         assertThat(responseData.getBody().getItems()).isNotEmpty();
+    }
+
+    @Test
+    void getDrugClinicalTrialInfoListTest() {
+        final Map<String, String> request = JsonConvert.toMap(DrugClinicalTrialInfoListRequest.builder()
+                .serviceKey(publicDataApiProperties.getEncodeKey())
+                .pageNo(10)
+                .numOfRows(100)
+                .type("json")
+                .build());
+
+        assertThat(request).isNotEmpty();
+
+        final Response response = this.medicalDrugClient.getDrugClinicalTrialInfoList(request);
+
+        assertThat(response).isNotNull();
+        assertThat(response.status()).isEqualTo(HttpStatus.OK.value());
+
+        final String responseBody = this.getBodyString(response);
+
+        assertThat(responseBody).isNotBlank();
+
+        final DrugClinicalTrialInfoListResponse responseData = JsonConvert.toObject(responseBody, new TypeReference<>() {
+        });
+
+        assertThat(responseData).isNotNull();
+        assertThat(responseData.getHeader().getResultCode()).isEqualTo("00");
+        assertThat(responseData.getBody().getItems()).isNotEmpty();
+
+        // entity & repository 생성 및 저장
+        final List<DrugClinicalTrialInfo> drugClinicalTrialInfos = responseData.getBody().getItems().stream()
+                .map(item -> DrugClinicalTrialInfo.builder()
+                        .hashCode(item.getHashCode())
+                        .applyName(item.getApplyName())
+                        .approvalTime(item.getApprovalTime())
+                        .labName(item.getLabName())
+                        .goodsName(item.getGoodsName())
+                        .clinicalTrialTitle(item.getClinicalTrialTitle())
+                        .clinicalTrialStep(item.getClinicalTrialStep())
+                        .build())
+                .collect(Collectors.toList());
+
+        assertThat(drugClinicalTrialInfos).isNotEmpty();
+
+        this.drugClinicalTrialInfoRepository.saveAll(drugClinicalTrialInfos);
     }
 
 
