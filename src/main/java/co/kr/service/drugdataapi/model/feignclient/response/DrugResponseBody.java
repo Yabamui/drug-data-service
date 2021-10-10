@@ -19,4 +19,14 @@ public class DrugResponseBody <T> {
     private final Integer numOfRows;
     @JsonProperty("items")
     private final List<T> items;
+
+    public static <T> DrugResponseBody<T> getInstance(final int pageNo, final int totalCount, final int numOfRows,
+                                                   final List<T> items) {
+        return DrugResponseBody.<T>builder()
+                .pageNo(pageNo)
+                .totalCount(totalCount)
+                .numOfRows(numOfRows)
+                .items(items)
+                .build();
+    }
 }

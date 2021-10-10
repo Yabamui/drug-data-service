@@ -13,4 +13,8 @@ public class DrugResponseHeader {
     private final String resultCode;
     @JsonProperty("resultMsg")
     private final String resultMsg;
+
+    public static DrugResponseHeader getInstance(final String resultCode, final String resultMsg) {
+        return DrugResponseHeader.builder().resultCode(resultCode).resultMsg(resultMsg).build();
+    }
 }

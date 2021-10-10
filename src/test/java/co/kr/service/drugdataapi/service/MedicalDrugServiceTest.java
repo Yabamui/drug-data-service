@@ -1,6 +1,8 @@
 package co.kr.service.drugdataapi.service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
@@ -8,8 +10,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import co.kr.service.drugdataapi.enums.drugeffectusagequantity.ProviderTypeCode;
 import co.kr.service.drugdataapi.enums.drugeffectusagequantity.InsurerTypeCode;
+import co.kr.service.drugdataapi.enums.drugeffectusagequantity.ProviderTypeCode;
 import co.kr.service.drugdataapi.feignclient.MedicalDrugClient;
 import co.kr.service.drugdataapi.model.customproperties.PublicDataApiProperties;
 import co.kr.service.drugdataapi.model.feignclient.request.*;
@@ -30,7 +32,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.DigestUtils;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -54,6 +55,8 @@ class MedicalDrugServiceTest {
     private DrugEssentialItemRepository drugEssentialItemRepository;
     @Autowired
     private DrugClinicalTrialInfoRepository drugClinicalTrialInfoRepository;
+    @Autowired
+    private DrugSupplyLackInfoRepository drugSupplyLackInfoRepository;
 
     @Test
     void getDrbEasyDrugListTest() {
@@ -750,6 +753,120 @@ class MedicalDrugServiceTest {
         this.drugClinicalTrialInfoRepository.saveAll(drugClinicalTrialInfos);
     }
 
+    @Test
+    void getDrugSupplyLackListTest() {
+        int pageNo = 1;
+        final int numOfRow = 100;
+        int totalPage = 0;
+
+        do {
+            log.info("pageNo : " + pageNo + " / totalPage : " + totalPage);
+            final DrugSupplyLackListResponse response = this.getDrugSupplyLackListResponse(pageNo, numOfRow);
+
+            if (!response.getHeader().getResultCode().equals("00")) {
+                log.error("response code : " + response.getHeader().getResultCode() + " / message : " + response.getHeader().getResultMsg());
+                return;
+            }
+
+            if (CollectionUtils.isEmpty(response.getBody().getItems())) {
+                log.info("response item is empty");
+                return;
+            }
+
+            if (Objects.isNull(response.getBody().getTotalCount())) {
+                log.info("response total count is zero");
+                return;
+            }
+
+            if (totalPage == 0) {
+                totalPage = this.getTotalPage(response.getBody().getTotalCount(), numOfRow);
+
+                if (totalPage == 0) {
+                    log.info("response total page is zero");
+                    return;
+                }
+            }
+
+            this.saveDrugSupplyLackList(response);
+
+            pageNo ++;
+        } while (pageNo <= totalPage);
+    }
+
+    private DrugSupplyLackListResponse getDrugSupplyLackListResponse(final int pageNo, final int numOfRows) {
+        final Map<String, String> request = JsonConvert.toMap(DrugSupplyLackListRequest.builder()
+                .serviceKey(publicDataApiProperties.getEncodeKey())
+                .pageNo(pageNo)
+                .numOfRows(numOfRows)
+                .type("json")
+                .build());
+
+        if (request.isEmpty()) {
+            return DrugSupplyLackListResponse.ofFail("9999", "request empty");
+        }
+
+        final Response response = this.medicalDrugClient.getDrugSupplyLackList(request);
+
+        if (Objects.isNull(response)) {
+            return DrugSupplyLackListResponse.ofFail("9999", "response empty");
+        }
+
+        if (response.status() != HttpStatus.OK.value()) {
+            return DrugSupplyLackListResponse.ofFail("9999", "response status is : " + response.status());
+        }
+
+        final String responseBody = this.getBodyString(response);
+
+        if (StringUtils.isBlank(responseBody)) {
+            return DrugSupplyLackListResponse.ofFail("9999", "response body is empty");
+        }
+
+        final DrugSupplyLackListResponse responseData = JsonConvert.toObject(responseBody, new TypeReference<>() {
+        });
+
+        if (Objects.isNull(responseData)) {
+            return DrugSupplyLackListResponse.ofFail("9999", "response body convert fail");
+        }
+
+        return responseData;
+    }
+
+    private void saveDrugSupplyLackList(final DrugSupplyLackListResponse responseData) {
+        final List<DrugSupplyLackInfo> drugSupplyLackInfos = responseData.getBody().getItems().stream()
+                .map(item -> DrugSupplyLackInfo.builder()
+                        .hashCode(item.getHashCode())
+                        .reportProgressCode(item.getReportProgressCode())
+                        .shortSupplyReportSeq(item.getShortSupplyReportSeq())
+                        .enterpriseSeq(item.getEnterpriseSeq())
+                        .enterpriseName(item.getEnterpriseName())
+                        .enterpriseNo(item.getEnterpriseNo())
+                        .enterpriseAddress(item.getEnterpriseAddress())
+                        .reporter(item.getReporter())
+                        .reporterTelNo(item.getReporterTelNo())
+                        .departmentReceiptNo(item.getDepartmentReceiptNo())
+                        .itemSeq(item.getItemSeq())
+                        .itemName(item.getItemName())
+                        .ediCode(item.getEdiCode())
+                        .shortSupplyExpectationDate(item.getShortSupplyExpectationDate())
+                        .shortSupplyReason(item.getShortSupplyReason())
+                        .lastSupplyDate(item.getLastSupplyDate())
+                        .lastSupplyType(item.getLastSupplyType())
+                        .inventoryQuantityDate(item.getInventoryQuantityDate())
+                        .inventoryQuantity(item.getInventoryQuantity())
+                        .treatmentImpact(item.getTreatmentImpact())
+                        .supplyPlan(item.getSupplyPlan())
+                        .supplyPlanDate(item.getSupplyPlanDate())
+                        .reportDate(item.getReportDate())
+                        .progressDate(item.getProgressDate())
+                        .openAgreeValue(item.getOpenAgreeValue())
+                        .build())
+                .collect(Collectors.toList());
+
+        assertThat(drugSupplyLackInfos).isNotEmpty();
+
+        this.drugSupplyLackInfoRepository.saveAll(drugSupplyLackInfos);
+    }
+
 
     private String getBodyString(final Response response) {
         try {
@@ -762,6 +879,14 @@ class MedicalDrugServiceTest {
 
     private <T> T getResponseDto(final String responseBody, final TypeReference<T> reference) {
         return JsonConvert.toObject(responseBody, reference);
+    }
+
+    private int getTotalPage(final int totalCount, final int numOfRow) {
+        if (totalCount == 0 || numOfRow == 0) {
+            return 0;
+        }
+
+        return BigDecimal.valueOf(totalCount).divide(BigDecimal.valueOf(numOfRow), RoundingMode.CEILING).intValue();
     }
 
     @Test
