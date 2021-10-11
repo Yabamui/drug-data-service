@@ -62,6 +62,8 @@ class MedicalDrugServiceTest {
     private DrugReEvaluationInfoRepository drugReEvaluationInfoRepository;
     @Autowired
     private DrugReExaminationInfoRepository drugReExaminationInfoRepository;
+    @Autowired
+    private DrugAdministrativeDispositionInfoRepository drugAdministrativeDispositionInfoRepository;
 
     private static final String RESPONSE_TYPE = "json";
 
@@ -1184,6 +1186,123 @@ class MedicalDrugServiceTest {
             }
 
             this.drugReExaminationInfoRepository.saveAll(drugReExaminationInfos);
+            pageNo ++;
+        } while (pageNo <= totalPage);
+    }
+
+    @Test
+    void getDrugAdministrativeDispositionListClientTest() {
+        final int pageNo = 1;
+        final int numOfRows = 1;
+
+        final Map<String, String> request = JsonConvert.toMap(DrugAdministrativeDispositionListRequest.builder()
+                .serviceKey(publicDataApiProperties.getEncodeKey())
+                .pageNo(pageNo)
+                .numOfRows(numOfRows)
+                .type(RESPONSE_TYPE)
+                .build());
+
+        assertThat(request).isNotEmpty();
+
+        final Response response = this.medicalDrugClient.getDrugAdministrativeDispositionList(request);
+
+        assertThat(response).isNotNull();
+        assertThat(response.status()).isEqualTo(HttpStatus.OK.value());
+
+        final String responseBody = this.getBodyString(response);
+
+        assertThat(responseBody).isNotBlank();
+
+        final DrugAdministrativeDispositionListResponse responseData = JsonConvert.toObject(responseBody, new TypeReference<>() {
+        });
+
+        assertThat(responseData).isNotNull();
+        assertThat(responseData.getHeader().getResultCode()).isEqualTo("00");
+        assertThat(responseData.getBody().getItems()).isNotEmpty();
+    }
+
+    @Test
+    void createDrugAdministrativeDispositionInfo() {
+        int pageNo = 1;
+        final int numOfRows = 100;
+        int totalPage = 0;
+
+        do {
+            log.info("pageNo : " + pageNo + " / totalPage : " + totalPage);
+            final Map<String, String> request = JsonConvert.toMap(DrugAdministrativeDispositionListRequest.builder()
+                    .serviceKey(publicDataApiProperties.getEncodeKey())
+                    .pageNo(pageNo)
+                    .numOfRows(numOfRows)
+                    .type(RESPONSE_TYPE)
+                    .build());
+
+            assertThat(request).isNotEmpty();
+
+            final Response response = this.medicalDrugClient.getDrugAdministrativeDispositionList(request);
+
+            if (Objects.isNull(response)) {
+                log.error(DrugResponseCode.CODE_FAIL_RESPONSE_EMPTY.getCode() + " / " + DrugResponseCode.CODE_FAIL_RESPONSE_EMPTY.getMessage());
+                break;
+            }
+
+            if (response.status() != HttpStatus.OK.value()) {
+                log.error(DrugResponseCode.CODE_FAIL_RESPONSE_STATUS_NOT_OK.getCode() + " / " + DrugResponseCode.CODE_FAIL_RESPONSE_STATUS_NOT_OK.getMessage());
+                break;
+            }
+
+            final String responseBody = this.getBodyString(response);
+
+            if (StringUtils.isBlank(responseBody)) {
+                log.error(DrugResponseCode.CODE_FAIL_RESPONSE_BODY_EMPTY.getCode() + " / " + DrugResponseCode.CODE_FAIL_RESPONSE_BODY_EMPTY.getMessage());
+                break;
+            }
+
+            final DrugAdministrativeDispositionListResponse responseData = JsonConvert.toObject(responseBody, new TypeReference<>() {
+            });
+
+            if (Objects.isNull(responseData) || Objects.isNull(responseData.getHeader()) || Objects.isNull(responseData.getBody())) {
+                log.error(DrugResponseCode.CODE_FAIL_RESPONSE_BODY_CONVERT_FAIL.getCode() + " / "
+                        + DrugResponseCode.CODE_FAIL_RESPONSE_BODY_CONVERT_FAIL.getMessage());
+                break;
+            }
+
+            if (responseData.getHeader().isFail()) {
+                log.error("response code : " + responseData.getHeader().getResultCode() + " / message : " + responseData.getHeader().getResultMsg());
+                return;
+            }
+
+            if (responseData.getBody().isItemEmpty()) {
+                log.info("response item or total-count is empty");
+                return;
+            }
+
+            if (totalPage == 0) {
+                totalPage = this.getTotalPage(responseData.getBody().getTotalCount(), numOfRows);
+            }
+
+            // entity & repository 생성 및 저장
+            final List<DrugAdministrativeDispositionInfo> drugAdministrativeDispositionInfos = responseData.getBody().getItems().stream()
+                    .map(item -> DrugAdministrativeDispositionInfo.builder()
+                            .hashCode(item.getHashCode())
+                            .enterpriseName(item.getEnterpriseName())
+                            .address(item.getAddress())
+                            .enterpriseNo(item.getEnterpriseNo())
+                            .itemName(item.getItemName())
+                            .violationLaw(item.getViolationLaw())
+                            .violationContents(item.getViolationContents())
+                            .administrativeDispositionSeq(item.getAdministrativeDispositionSeq())
+                            .administrativeDispositionName(item.getAdministrativeDispositionName())
+                            .administrativeDispositionDate(item.getAdministrativeDispositionDate())
+                            .administrativeDispositionPeriod(item.getAdministrativeDispositionPeriod())
+                            .build())
+                    .collect(Collectors.toList());
+
+            if (CollectionUtils.isEmpty(drugAdministrativeDispositionInfos)) {
+                log.error("entity generate is fail");
+                return;
+            }
+
+            this.drugAdministrativeDispositionInfoRepository.saveAll(drugAdministrativeDispositionInfos);
             pageNo ++;
         } while (pageNo <= totalPage);
     }
