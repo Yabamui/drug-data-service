@@ -13,9 +13,9 @@ public class DrugAdministrativeDispositionListRequest {
     private final int pageNo;
     private final int numOfRows;
     private final String type;
+    private final String order;
     @JsonProperty("entp_name")
     private final String enterpriseName;
     @JsonProperty("item_name")
     private final String itemName;
-    private final String order;
 }

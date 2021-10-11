@@ -66,6 +66,8 @@ class MedicalDrugServiceTest {
     private DrugAdministrativeDispositionInfoRepository drugAdministrativeDispositionInfoRepository;
     @Autowired
     private DrugStabilityLetterInfoRepository drugStabilityLetterInfoRepository;
+    @Autowired
+    private DrugProductPermissionInfoRepository drugProductPermissionInfoRepository;
 
     private static final String RESPONSE_TYPE = "json";
 
@@ -1417,6 +1419,128 @@ class MedicalDrugServiceTest {
             }
 
             this.drugStabilityLetterInfoRepository.saveAll(drugStabilityLetterInfos);
+            pageNo ++;
+        } while (pageNo <= totalPage);
+    }
+
+    @Test
+    void getDrugProductPermissionListClientTest() {
+        final int pageNo = 1;
+        final int numOfRows = 1;
+
+        final Map<String, String> request = JsonConvert.toMap(DrugProductPermissionListRequest.builder()
+                .serviceKey(publicDataApiProperties.getEncodeKey())
+                .pageNo(pageNo)
+                .numOfRows(numOfRows)
+                .type(RESPONSE_TYPE)
+                .build());
+
+        assertThat(request).isNotEmpty();
+
+        final Response response = this.medicalDrugClient.getDrugProductPermissionList(request);
+
+        assertThat(response).isNotNull();
+        assertThat(response.status()).isEqualTo(HttpStatus.OK.value());
+
+        final String responseBody = this.getBodyString(response);
+
+        assertThat(responseBody).isNotBlank();
+
+        final DrugProductPermissionListResponse responseData = JsonConvert.toObject(responseBody, new TypeReference<>() {
+        });
+
+        assertThat(responseData).isNotNull();
+        assertThat(responseData.getHeader().getResultCode()).isEqualTo("00");
+        assertThat(responseData.getBody().getItems()).isNotEmpty();
+    }
+
+    @Test
+    void creatDrugProductPermissionInfo() {
+        int pageNo = 600;
+        final int numOfRows = 100;
+        int totalPage = 0;
+
+        do {
+            log.info("pageNo : " + pageNo + " / totalPage : " + totalPage);
+            final Map<String, String> request = JsonConvert.toMap(DrugProductPermissionListRequest.builder()
+                    .serviceKey(publicDataApiProperties.getEncodeKey())
+                    .pageNo(pageNo)
+                    .numOfRows(numOfRows)
+                    .type(RESPONSE_TYPE)
+                    .build());
+
+            assertThat(request).isNotEmpty();
+
+            final Response response = this.medicalDrugClient.getDrugProductPermissionList(request);
+
+            if (Objects.isNull(response)) {
+                log.error(DrugResponseCode.CODE_FAIL_RESPONSE_EMPTY.getCode() + " / " + DrugResponseCode.CODE_FAIL_RESPONSE_EMPTY.getMessage());
+                break;
+            }
+
+            if (response.status() != HttpStatus.OK.value()) {
+                log.error(DrugResponseCode.CODE_FAIL_RESPONSE_STATUS_NOT_OK.getCode() + " / " + DrugResponseCode.CODE_FAIL_RESPONSE_STATUS_NOT_OK.getMessage());
+                break;
+            }
+
+            final String responseBody = this.getBodyString(response);
+
+            if (StringUtils.isBlank(responseBody)) {
+                log.error(DrugResponseCode.CODE_FAIL_RESPONSE_BODY_EMPTY.getCode() + " / " + DrugResponseCode.CODE_FAIL_RESPONSE_BODY_EMPTY.getMessage());
+                break;
+            }
+
+            final DrugProductPermissionListResponse responseData = JsonConvert.toObject(responseBody, new TypeReference<>() {
+            });
+
+            if (Objects.isNull(responseData) || Objects.isNull(responseData.getHeader()) || Objects.isNull(responseData.getBody())) {
+                log.error(DrugResponseCode.CODE_FAIL_RESPONSE_BODY_CONVERT_FAIL.getCode() + " / "
+                        + DrugResponseCode.CODE_FAIL_RESPONSE_BODY_CONVERT_FAIL.getMessage());
+                break;
+            }
+
+            if (responseData.getHeader().isFail()) {
+                log.error("response code : " + responseData.getHeader().getResultCode() + " / message : " + responseData.getHeader().getResultMsg());
+                return;
+            }
+
+            if (responseData.getBody().isItemEmpty()) {
+                log.info("response item or total-count is empty");
+                return;
+            }
+
+            if (totalPage == 0) {
+                totalPage = this.getTotalPage(responseData.getBody().getTotalCount(), numOfRows);
+            }
+
+            // entity & repository 생성 및 저장
+            final List<DrugProductPermissionInfo> drugProductPermissionInfos = responseData.getBody().getItems().stream()
+                    .map(item -> DrugProductPermissionInfo.builder()
+                            .hashCode(item.getHashCode())
+                            .enterpriseName(item.getEnterpriseName())
+                            .industry(item.getIndustry())
+                            .serialNo(item.getSerialNo())
+                            .drugType(item.getDrugType())
+                            .productType(item.getProductType())
+                            .permissionNo(item.getPermissionNo())
+                            .permissionType(item.getPermissionType())
+                            .itemSeq(item.getItemSeq())
+                            .itemName(item.getItemName())
+                            .itemPermissionDate(item.getItemPermissionDate())
+                            .itemIngredientName(item.getItemIngredientName())
+                            .itemIngredientCount(item.getItemIngredientCount())
+                            .cancelDate(item.getCancelDate())
+                            .cancelName(item.getCancelName())
+                            .productImageUrl(item.getProductImageUrl())
+                            .build())
+                    .collect(Collectors.toList());
+
+            if (CollectionUtils.isEmpty(drugProductPermissionInfos)) {
+                log.error("entity generate is fail");
+                return;
+            }
+
+            this.drugProductPermissionInfoRepository.saveAll(drugProductPermissionInfos);
             pageNo ++;
         } while (pageNo <= totalPage);
     }

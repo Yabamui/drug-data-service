@@ -188,4 +188,13 @@ public interface MedicalDrugClient {
      */
     @GetMapping("/1470000/SafeLetterService/getSafeLetterList")
     Response getDrugStabilityLetterList(@RequestParam Map<String, String> request);
+
+    /**
+     * 의약품 제품 허가정보
+     *
+     * @param request 요청 정보
+     * @return 응답 정보
+     */
+    @GetMapping("/1471057/MdcinPrductPrmisnInfoService1/getMdcinPrductList")
+    Response getDrugProductPermissionList(@RequestParam Map<String, String> request);
 }
