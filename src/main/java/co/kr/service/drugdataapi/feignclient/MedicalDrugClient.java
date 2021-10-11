@@ -161,4 +161,13 @@ public interface MedicalDrugClient {
      */
     @GetMapping("/1470000/MdcinRevalService/getMdcinRevalList")
     Response getDrugReEvaluationList(@RequestParam Map<String, String> request);
+
+    /**
+     * 의약품 재심사 정보
+     *
+     * @param request 요청 정보
+     * @return 응답 정보
+     */
+    @GetMapping("/1470000/MdcinRejdgeService/getMdcinRdjdgeList")
+    Response getDrugReExaminationList(@RequestParam Map<String, String> request);
 }

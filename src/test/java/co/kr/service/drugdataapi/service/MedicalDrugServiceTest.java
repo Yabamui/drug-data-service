@@ -60,6 +60,8 @@ class MedicalDrugServiceTest {
     private DrugSupplyLackInfoRepository drugSupplyLackInfoRepository;
     @Autowired
     private DrugReEvaluationInfoRepository drugReEvaluationInfoRepository;
+    @Autowired
+    private DrugReExaminationInfoRepository drugReExaminationInfoRepository;
 
     private static final String RESPONSE_TYPE = "json";
 
@@ -1064,6 +1066,124 @@ class MedicalDrugServiceTest {
             }
 
             this.drugReEvaluationInfoRepository.saveAll(drugReEvaluationInfos);
+            pageNo ++;
+        } while (pageNo <= totalPage);
+    }
+
+    @Test
+    void getDrugReExaminationListClientTest() {
+        final int pageNo = 1;
+        final int numOfRows = 1;
+
+        final Map<String, String> request = JsonConvert.toMap(DrugReExaminationListRequest.builder()
+                .serviceKey(publicDataApiProperties.getEncodeKey())
+                .pageNo(pageNo)
+                .numOfRows(numOfRows)
+                .type(RESPONSE_TYPE)
+                .build());
+
+        assertThat(request).isNotEmpty();
+
+        final Response response = this.medicalDrugClient.getDrugReExaminationList(request);
+
+        assertThat(response).isNotNull();
+        assertThat(response.status()).isEqualTo(HttpStatus.OK.value());
+
+        final String responseBody = this.getBodyString(response);
+
+        assertThat(responseBody).isNotBlank();
+
+        final DrugReExaminationListResponse responseData = JsonConvert.toObject(responseBody, new TypeReference<>() {
+        });
+
+        assertThat(responseData).isNotNull();
+        assertThat(responseData.getHeader().getResultCode()).isEqualTo("00");
+        assertThat(responseData.getBody().getItems()).isNotEmpty();
+    }
+
+    @Test
+    void createDrugReExaminationInfoTest() {
+        int pageNo = 1;
+        final int numOfRows = 100;
+        int totalPage = 0;
+
+        do {
+            log.info("pageNo : " + pageNo + " / totalPage : " + totalPage);
+            final Map<String, String> request = JsonConvert.toMap(DrugReExaminationListRequest.builder()
+                    .serviceKey(publicDataApiProperties.getEncodeKey())
+                    .pageNo(pageNo)
+                    .numOfRows(numOfRows)
+                    .type(RESPONSE_TYPE)
+                    .build());
+
+            assertThat(request).isNotEmpty();
+
+            final Response response = this.medicalDrugClient.getDrugReExaminationList(request);
+
+            if (Objects.isNull(response)) {
+                log.error(DrugResponseCode.CODE_FAIL_RESPONSE_EMPTY.getCode() + " / " + DrugResponseCode.CODE_FAIL_RESPONSE_EMPTY.getMessage());
+                break;
+            }
+
+            if (response.status() != HttpStatus.OK.value()) {
+                log.error(DrugResponseCode.CODE_FAIL_RESPONSE_STATUS_NOT_OK.getCode() + " / " + DrugResponseCode.CODE_FAIL_RESPONSE_STATUS_NOT_OK.getMessage());
+                break;
+            }
+
+            final String responseBody = this.getBodyString(response);
+
+            if (StringUtils.isBlank(responseBody)) {
+                log.error(DrugResponseCode.CODE_FAIL_RESPONSE_BODY_EMPTY.getCode() + " / " + DrugResponseCode.CODE_FAIL_RESPONSE_BODY_EMPTY.getMessage());
+                break;
+            }
+
+            final DrugReExaminationListResponse responseData = JsonConvert.toObject(responseBody, new TypeReference<>() {
+            });
+
+            if (Objects.isNull(responseData) || Objects.isNull(responseData.getHeader()) || Objects.isNull(responseData.getBody())) {
+                log.error(DrugResponseCode.CODE_FAIL_RESPONSE_BODY_CONVERT_FAIL.getCode() + " / "
+                        + DrugResponseCode.CODE_FAIL_RESPONSE_BODY_CONVERT_FAIL.getMessage());
+                break;
+            }
+
+            if (responseData.getHeader().isFail()) {
+                log.error("response code : " + responseData.getHeader().getResultCode() + " / message : " + responseData.getHeader().getResultMsg());
+                return;
+            }
+
+            if (responseData.getBody().isItemEmpty()) {
+                log.info("response item or total-count is empty");
+                return;
+            }
+
+            if (totalPage == 0) {
+                totalPage = this.getTotalPage(responseData.getBody().getTotalCount(), numOfRows);
+            }
+
+            // entity & repository 생성 및 저장
+            final List<DrugReExaminationInfo> drugReExaminationInfos = responseData.getBody().getItems().stream()
+                    .map(item -> DrugReExaminationInfo.builder()
+                            .hashCode(item.getHashCode())
+                            .enterpriseName(item.getEnterpriseName())
+                            .factoryAddress(item.getFactoryAddress())
+                            .representative(item.getRepresentative())
+                            .itemName(item.getItemName())
+                            .itemNo(item.getItemNo())
+                            .reportType(item.getReportType())
+                            .classificationName(item.getClassificationName())
+                            .reExaminationStartDate(item.getReExaminationStartDate())
+                            .reExaminationCodeName(item.getReExaminationCodeName())
+                            .reportDeadlineDate(item.getReportDeadlineDate())
+                            .resultDate(item.getResultDate())
+                            .build())
+                    .collect(Collectors.toList());
+
+            if (CollectionUtils.isEmpty(drugReExaminationInfos)) {
+                log.error("entity generate is fail");
+                return;
+            }
+
+            this.drugReExaminationInfoRepository.saveAll(drugReExaminationInfos);
             pageNo ++;
         } while (pageNo <= totalPage);
     }
