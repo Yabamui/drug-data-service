@@ -12,7 +12,7 @@ import lombok.*;
 @Getter
 public class DrugSupplyLackInfo extends EntityBaseAudit implements Serializable {
     @Id
-    @Column(name = "hash_code", length = 32, nullable = false, columnDefinition = "varchar(32) comment '해시정보'")
+    @Column(name = "hash_code", length = 64, nullable = false, columnDefinition = "varchar(64) comment '해시정보'")
     private String hashCode;
 
     @Column(name = "report_progress_code", length = 256, columnDefinition = "varchar(256) comment '진행단계'")
@@ -81,8 +81,8 @@ public class DrugSupplyLackInfo extends EntityBaseAudit implements Serializable 
     @Column(name = "report_date", length = 20, columnDefinition = "varchar(20) comment '보고일자'")
     private String reportDate;
 
-    @Column(name = "progress_date", length = 20, columnDefinition = "varchar(20) comment '처리일자'")
-    private String progressDate;
+    @Column(name = "result_date", length = 20, columnDefinition = "varchar(20) comment '처리일자'")
+    private String resultDate;
 
     @Column(name = "open_agree_value", length = 40, columnDefinition = "varchar(40) comment '전자민원창구 공개여부'")
     private String openAgreeValue;
@@ -95,7 +95,7 @@ public class DrugSupplyLackInfo extends EntityBaseAudit implements Serializable 
                                final String ediCode, final String shortSupplyExpectationDate, final String shortSupplyReason,
                                final String lastSupplyDate, final String lastSupplyType, final String inventoryQuantityDate,
                                final String inventoryQuantity, final String treatmentImpact, final String supplyPlan,
-                               final String supplyPlanDate, final String reportDate, final String progressDate,
+                               final String supplyPlanDate, final String reportDate, final String resultDate,
                                final String openAgreeValue) {
         this.hashCode = hashCode;
         this.reportProgressCode = reportProgressCode;
@@ -120,7 +120,7 @@ public class DrugSupplyLackInfo extends EntityBaseAudit implements Serializable 
         this.supplyPlan = supplyPlan;
         this.supplyPlanDate = supplyPlanDate;
         this.reportDate = reportDate;
-        this.progressDate = progressDate;
+        this.resultDate = resultDate;
         this.openAgreeValue = openAgreeValue;
     }
 }

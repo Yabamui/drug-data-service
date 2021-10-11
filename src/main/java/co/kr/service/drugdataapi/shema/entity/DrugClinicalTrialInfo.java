@@ -12,7 +12,7 @@ import lombok.*;
 @Getter
 public class DrugClinicalTrialInfo extends EntityBaseAudit implements Serializable {
     @Id
-    @Column(name = "hash_code", length = 32, columnDefinition = "varchar(32) comment '해시정보'")
+    @Column(name = "hash_code", length = 64, columnDefinition = "varchar(64) comment '해시정보'")
     private String hashCode;
 
     @Column(name = "apply_name", length = 256, columnDefinition = "varchar(256) comment '신청자'")

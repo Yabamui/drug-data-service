@@ -1,11 +1,9 @@
 package co.kr.service.drugdataapi.model.feignclient.response;
 
-import java.nio.charset.StandardCharsets;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
-import org.springframework.util.DigestUtils;
+import org.apache.commons.codec.digest.DigestUtils;
 
 @Builder
 @Getter
@@ -57,7 +55,7 @@ public class DrugSupplyLackListItem {
     @JsonProperty("REPORT_DATE")
     private final String reportDate;
     @JsonProperty("EXAM_RESULT_TIME")
-    private final String progressDate;
+    private final String resultDate;
     @JsonProperty("OPEN_AGREE_YN_NM")
     private final String openAgreeValue;
 
@@ -67,10 +65,11 @@ public class DrugSupplyLackListItem {
                 + this.enterpriseNo + this.enterpriseAddress + this.reporter + this.reporterTelNo + this.departmentReceiptNo
                 + this.itemSeq + this.itemName + this.ediCode + this.shortSupplyExpectationDate + this.shortSupplyReason
                 + this.lastSupplyDate + this.lastSupplyType + this.inventoryQuantityDate + this.inventoryQuantity
-                + this.treatmentImpact + this.supplyPlan + this.supplyPlanDate + this.reportDate + this.progressDate + openAgreeValue;
+                + this.treatmentImpact + this.supplyPlan + this.supplyPlanDate + this.reportDate + this.resultDate
+                + this.openAgreeValue;
     }
 
     public String getHashCode() {
-        return DigestUtils.md5DigestAsHex(this.toString().getBytes(StandardCharsets.UTF_8)).toUpperCase();
+        return DigestUtils.sha256Hex(this.toString()).toUpperCase();
     }
 }

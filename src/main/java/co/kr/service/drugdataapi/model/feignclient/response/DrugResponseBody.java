@@ -1,10 +1,12 @@
 package co.kr.service.drugdataapi.model.feignclient.response;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
+import org.springframework.util.CollectionUtils;
 
 @Builder
 @Getter
@@ -28,5 +30,18 @@ public class DrugResponseBody <T> {
                 .numOfRows(numOfRows)
                 .items(items)
                 .build();
+    }
+
+    public static <T> DrugResponseBody<T> ofEmpty() {
+        return DrugResponseBody.<T>builder()
+                .pageNo(0)
+                .totalCount(0)
+                .numOfRows(0)
+                .items(Collections.emptyList())
+                .build();
+    }
+
+    public boolean isItemEmpty() {
+        return CollectionUtils.isEmpty(this.items) || totalCount == 0;
     }
 }

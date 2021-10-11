@@ -1,11 +1,9 @@
 package co.kr.service.drugdataapi.model.feignclient.response;
 
-import java.nio.charset.StandardCharsets;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
-import org.springframework.util.DigestUtils;
+import org.apache.commons.codec.digest.DigestUtils;
 
 @Builder
 @Getter
@@ -32,6 +30,6 @@ public class DrugClinicalTrialInfoListItem {
     }
 
     public String getHashCode() {
-        return DigestUtils.md5DigestAsHex(this.toString().getBytes(StandardCharsets.UTF_8)).toUpperCase();
+        return DigestUtils.sha256Hex(this.toString()).toUpperCase();
     }
 }
